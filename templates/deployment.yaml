@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+  name: {{ .Values.environment | lower }}-{{ .Values.services.webservice.name | lower }}
   namespace: {{ .Values.namespace | default "default" }}
   labels:
-    app: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+    app: {{ .Values.environment | lower }}-{{ .Values.services.webservice.name | lower }}
     environment: {{ .Values.environment | lower }}
-    webservice: {{ .Values.webservice.name | lower }}
+    webservice: {{ .Values.services.webservice.name | lower }}
     app.kubernetes.io/name: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+      app: {{ .Values.environment | lower }}-{{ .Values.services.webservice.name | lower }}
       environment: {{ .Values.environment | lower }}
-      webservice: {{ .Values.webservice.name | lower }}
+      webservice: {{ .Values.services.webservice.name | lower }}
       app.kubernetes.io/name: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+        app: {{ .Values.environment | lower }}-{{ .Values.services.webservice.name | lower }}
         environment: {{ .Values.environment | lower }}
-        webservice: {{ .Values.webservice.name | lower }}
+        webservice: {{ .Values.services.webservice.name | lower }}
         app.kubernetes.io/name: {{ .Release.Name }}
     spec:
       {{- if .Values.services.webService.serviceAccountName }}
@@ -32,7 +32,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+        - name: {{ .Values.environment | lower }}-{{ .Values.services.webservice.name | lower }}
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
