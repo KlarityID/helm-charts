@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+  namespace: {{ .Values.namespace | default "default" }}
+  labels:
+    app: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+    environment: {{ .Values.environment | lower }}
+    webservice: {{ .Values.webservice.name | lower }}
+    app.kubernetes.io/name: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+      environment: {{ .Values.environment | lower }}
+      webservice: {{ .Values.webservice.name | lower }}
+      app.kubernetes.io/name: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+        environment: {{ .Values.environment | lower }}
+        webservice: {{ .Values.webservice.name | lower }}
+        app.kubernetes.io/name: {{ .Release.Name }}
+    spec:
+      {{- if .Values.services.webService.serviceAccountName }}
+      serviceAccountName: {{ .Values.services.webService.serviceAccountName }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.environment | lower }}-{{ .Values.webservice.name | lower }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: {{ .Values.services.webService.image.url }}
+          imagePullPolicy: IfNotPresent
+          {{- with .Values.envs }}
+          env:
+            {{- range . }}
+            - name: {{ .name | quote }}
+              value: {{ .value | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.secret }}
+          envFrom:
+          - secretRef:
+              {{- if .Values.services.webService.secretName }}
+              name: {{ .Values.services.webService.secretName }}
+              {{- else if and .Values.internalService .Values.internalServiceEnvironment }}
+              name: {{ .Values.internalServiceEnvironment | lower }}-{{ .Values.services.webService.name }}
+              {{- else }}
+              name: {{ .Values.services.webService.name }}
+              {{- end }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.services.webService.port }}
+              name: http
+              protocol: TCP
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+              cpu: {{ .Values.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
+      {{- if .Values.services.webService.tolerations }}
+      tolerations:
+        {{- range .Values.services.webService.tolerations }}
+        - key: {{ .key }}
+          operator: {{ .operator }}
+          effect: {{ .effect }}
+          {{- if .value }}
+          value: {{ .value }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: alpha.eksctl.io/nodegroup-name
+                operator: In
+                values:
+                - {{ .Values.nodeGroup }}
