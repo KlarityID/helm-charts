@@ -51,8 +51,6 @@ spec:
           - secretRef:
               {{- if .Values.services.webService.secretName }}
               name: {{ .Values.services.webService.secretName }}
-              {{- else if and .Values.internalService .Values.internalServiceEnvironment }}
-              name: {{ .Values.internalServiceEnvironment | lower }}-{{ .Values.services.webService.name }}
               {{- else }}
               name: {{ .Values.services.webService.name }}
               {{- end }}
@@ -68,9 +66,9 @@ spec:
             limits:
               memory: {{ .Values.resources.limits.memory }}
               cpu: {{ .Values.resources.limits.cpu }}
-      {{- if .Values.services.webService.tolerations }}
+      {{- if .Values.services.tolerations }}
       tolerations:
-        {{- range .Values.services.webService.tolerations }}
+        {{- range .Values.services.tolerations }}
         - key: {{ .key }}
           operator: {{ .operator }}
           effect: {{ .effect }}
