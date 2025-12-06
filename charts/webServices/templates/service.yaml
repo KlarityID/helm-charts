@@ -1,4 +1,3 @@
-{{- if .Values.services.webService.external }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -22,6 +21,7 @@ spec:
     app.kubernetes.io/name: {{ .Release.Name }}
 
 
+{{- if .Values.services.webService.external }}
 # Ingress Route
 ---
 apiVersion: traefik.io/v1alpha1
