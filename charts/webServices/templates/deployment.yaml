@@ -58,7 +58,7 @@ spec:
               {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ .Values.services.webService.port }}
+            - containerPort: {{ .Values.services.targetPort }}
               name: http
               protocol: TCP
           resources:

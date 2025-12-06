@@ -12,8 +12,8 @@ metadata:
 spec:
   type: {{ .Values.services.webService.type | default "ClusterIP" }}
   ports:
-    - port: {{ .Values.services.webService.port }}
-      targetPort: {{ .Values.services.webService.port }}
+    - port: {{ .Values.services.targetPort }}
+      targetPort: {{ .Values.services.targetPort }}
       protocol: TCP
   selector:
     app: {{ .Values.environment | lower }}-{{ .Values.services.webService.name | lower }}
@@ -43,5 +43,5 @@ spec:
       services:
         - kind: Service
           name: {{ .Values.environment | lower }}-{{ .Values.services.webService.name | lower }}
-          port: {{ .Values.services.webService.port }}
+          port: {{ .Values.services.targetPort }}
 {{- end }}
