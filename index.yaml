@@ -3,6 +3,16 @@ entries:
   klarity-helm-charts:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2025-12-06T20:50:02.525483562Z"
+    description: A Helm chart for Kubernetes
+    digest: 385b287d7b44a30467694ec30ae6e109e8a910f639b6b3b49fdb36b226f0c9bb
+    name: klarity-helm-charts
+    type: application
+    urls:
+    - https://github.com/KlarityID/helm-charts/releases/download/klarity-helm-charts-0.1.7/klarity-helm-charts-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2025-12-06T20:00:00.442779746Z"
     description: A Helm chart for Kubernetes
     digest: feb6f23749cba303c87f91c24e28e2c51819114a07b6a0a5b7945bb0bce997ab
@@ -71,4 +81,4 @@ entries:
     urls:
     - https://github.com/KlarityID/helm-charts/releases/download/klarity-helm-charts-0.1.0/klarity-helm-charts-0.1.0.tgz
     version: 0.1.0
-generated: "2025-12-06T20:00:00.442812978Z"
+generated: "2025-12-06T20:50:02.525515612Z"
