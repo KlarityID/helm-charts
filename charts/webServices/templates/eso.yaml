@@ -1,5 +1,6 @@
 {{- if .Values.secrets.enabled }}
-apiVersion: external-secrets.io/v1beta1
+# Cluster Secret Store
+apiVersion: external-secrets.io/v1
 kind: ClusterSecretStore
 metadata:
   name: {{ .Values.environment | lower }}-{{ .Values.services.webService.name | lower }}
@@ -18,13 +19,15 @@ spec:
             namespace: infisical
             key: CLIENT_SECRET
       secretsScope:
-        projectSlug: {{ .Values.environment | lower }}-{{ .Values.project.name }}
+        projectSlug: {{ .Values.project.slug }}
         environmentSlug: {{ .Values.environment | lower }}
         secretsPath: /{{ .Values.services.webService.name | lower }}
         recursive: true
         expandSecretReferences: false
+
 ---
-apiVersion: external-secrets.io/v1beta1
+# External Secret
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: {{ .Values.environment | lower }}-{{ .Values.services.webService.name | lower }}
