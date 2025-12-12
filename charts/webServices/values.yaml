@@ -140,3 +140,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+secrets:
+  enabled: true
