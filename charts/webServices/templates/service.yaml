@@ -39,7 +39,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`{{ .Values.services.webService.hostSuffix }}.{{ .Values.domain }}`)
+      match: Host(`{{ .Values.environment | lower }}-{{ .Values.services.webService.name | lower }}.{{ .Values.domain }}`)
       services:
         - kind: Service
           name: {{ .Values.environment | lower }}-{{ .Values.services.webService.name | lower }}
