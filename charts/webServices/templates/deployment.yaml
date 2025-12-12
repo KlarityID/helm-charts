@@ -46,13 +46,13 @@ spec:
               value: {{ .value | quote }}
             {{- end }}
           {{- end }}
-          {{- if .Values.secret }}
+          {{- if .Values.secrets.enabled }}
           envFrom:
           - secretRef:
               {{- if .Values.services.webService.secretName }}
               name: {{ .Values.services.webService.secretName }}
               {{- else }}
-              name: {{ .Values.services.webService.name }}
+              name: {{ .Values.environment | lower }}-{{ .Values.services.webService.name | lower }}
               {{- end }}
           {{- end }}
           ports:
