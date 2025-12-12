@@ -143,3 +143,6 @@ affinity: {}
 
 secrets:
   enabled: true
+
+project:
+  name: "klarity"

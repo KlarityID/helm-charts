@@ -18,7 +18,7 @@ spec:
             namespace: infisical
             key: CLIENT_SECRET
       secretsScope:
-        projectSlug: {{ .Values.project.slug }}
+        projectSlug: {{ .Values.environment | lower }}-{{ .Values.project.name }}
         environmentSlug: {{ .Values.environment | lower }}
         secretsPath: /{{ .Values.services.webService.name | lower }}
         recursive: true
